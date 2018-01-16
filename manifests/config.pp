@@ -39,7 +39,7 @@ class tsm::config {
   }
   -> concat::fragment { 'dsm_sys_local':
     target => $::tsm::config,
-    source => "${::tsm::config}.local",
+    source => File["${::tsm::config}.local"],
     order  => '31',
   }
 
