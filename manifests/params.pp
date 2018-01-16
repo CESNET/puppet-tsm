@@ -14,6 +14,7 @@
 #
 class tsm::params {
   $package_ensure = 'installed'
+  $packages_manage = true
 
   $service_manage = false
   $service_enable = true

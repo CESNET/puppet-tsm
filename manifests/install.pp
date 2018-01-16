@@ -13,34 +13,37 @@
 #
 class tsm::install {
   tsm::installpkg { $::tsm::packages:
-    ensure    => $::tsm::package_ensure,
-    uri       => $::tsm::package_uri,
-    adminfile => $::tsm::package_adminfile,
-    provider  => $::tsm::package_provider,
+    packages_manage => $::tsm::packages_manage,
+    ensure          => $::tsm::package_ensure,
+    uri             => $::tsm::package_uri,
+    adminfile       => $::tsm::package_adminfile,
+    provider        => $::tsm::package_provider,
   }
 
-  case $::osfamily {
-    solaris: {
-      case $::hardwareisa {
-        i386: {
-          Package['gsk8cry32']
-          -> Package['gsk8ssl32']
-          -> Package['gsk8cry64']
-          -> Package['gsk8ssl64']
-          -> Package['TIVsmCapi']
-          -> Package['TIVsmCba']
-        }
-        sparc: {
-          Package['gsk8cry64']
-          -> Package['gsk8ssl64']
-          -> Package['TIVsmCapi']
-          -> Package['TIVsmCba']
-        }
-        default: {
-          fail("Unsupported hardwareisa ${::hardwareisa} for osfamily ${::osfamily} in install.pp!")
+  if $::tsm::packages_manage {
+    case $::osfamily {
+      solaris: {
+        case $::hardwareisa {
+          i386: {
+            Package['gsk8cry32']
+            -> Package['gsk8ssl32']
+            -> Package['gsk8cry64']
+            -> Package['gsk8ssl64']
+            -> Package['TIVsmCapi']
+            -> Package['TIVsmCba']
+          }
+          sparc: {
+            Package['gsk8cry64']
+            -> Package['gsk8ssl64']
+            -> Package['TIVsmCapi']
+            -> Package['TIVsmCba']
+          }
+          default: {
+            fail("Unsupported hardwareisa ${::hardwareisa} for osfamily ${::osfamily} in install.pp!")
+          }
         }
       }
+      default: {}
     }
-    default: {}
   }
 }

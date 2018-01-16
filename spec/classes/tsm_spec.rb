@@ -379,6 +379,16 @@ describe 'tsm' do
       }
     end
 
+    describe 'should not manage tsm packages' do
+      let(:params) do
+	{
+          :packages_manage => false
+	}
+      end
+
+      it { should_not contain_tsm__installpkg('TIVsm-BA') }
+    end
+
     describe 'should install tsm packages ' do
       let(:params) do
         {
@@ -669,6 +679,16 @@ describe 'tsm' do
 
     describe 'when tsm::service_manage is false' do
       it { should_not contain_class('tsm::service::debian')}
+    end
+
+    describe 'should not manage tsm packages' do
+      let(:params) do
+        {
+          :packages_manage => false
+        }
+      end
+
+      it { should_not contain_tsm__installpkg('TIVsm-BA') }
     end
 
     describe 'should install tsm packages ' do

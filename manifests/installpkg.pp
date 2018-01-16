@@ -4,6 +4,10 @@
 #
 # === Parameters
 #
+# [*packages_manage*]
+#   Whether tsm packages should be managed by this module or not
+#   Default: true
+#
 # [*ensure*]
 #   What should be done with the package
 #   Default: installed
@@ -27,36 +31,40 @@
 #
 
 define tsm::installpkg (
-  $ensure    = 'installed',
-  $adminfile = '/dev/null',
-  $uri        = '',
-  $provider   = undef,
+  $packages_manage = true,
+  $ensure          = 'installed',
+  $adminfile       = '/dev/null',
+  $uri             = '',
+  $provider        = undef,
   ) {
+  validate_bool($packages_manage)
   validate_string($ensure)
   validate_absolute_path($adminfile)
   validate_string($uri)
   validate_string($provider)
 
-  package { $title:
-    ensure => $ensure,
-  }
+  if $packages_manage {
+    package { $title:
+      ensure => $ensure,
+    }
 
-  case $::osfamily {
-    solaris: {
-      Package[$title] {
-        source          => "${uri}/${title}.pkg",
-        adminfile       => $adminfile,
-        install_options => ['-G', ],
-        provider        => 'sun',
+    case $::osfamily {
+      solaris: {
+        Package[$title] {
+          source          => "${uri}/${title}.pkg",
+          adminfile       => $adminfile,
+          install_options => ['-G', ],
+          provider        => 'sun',
+        }
       }
-    }
-    'AIX': {
-      Package[$title] {
-        source   => $uri,
-        provider => $provider,
+      'AIX': {
+        Package[$title] {
+          source   => $uri,
+          provider => $provider,
+        }
       }
-    }
-    default: {
+      default: {
+      }
     }
   }
 }

@@ -23,6 +23,10 @@
 #   package_ensure - optional
 #   Default: 'installed'
 #
+# [*packages_manage*]
+#   Whether tsm packages should be managed by this module or not
+#   Default: true
+#
 # [*packages*]
 #   List of tsm package to be installed
 #   packages - optional
@@ -237,6 +241,7 @@ class tsm (
   $tcp_port                = $::tsm::params::tcp_port,
   $package_ensure          = $::tsm::params::package_ensure,
   $packages                = $::tsm::params::packages,
+  $packages_manage         = $::tsm::params::packages_manage,
   $package_adminfile       = $::tsm::params::package_adminfile,
   $package_uri             = $::tsm::params::package_uri,
   $package_provider        = $::tsm::params::package_provider,
